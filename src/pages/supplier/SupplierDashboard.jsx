@@ -1,62 +1,46 @@
 import { Link } from 'react-router-dom';
-import Button from '../../components/ui/Button';
+import SEO from '../../components/SEO';
 
 const SupplierDashboard = () => {
   return (
-    <div style={{ padding: '2rem' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Supplier Dashboard</h1>
-        <div style={{ display: 'flex', gap: '1rem' }}>
-          <Link to="/supplier/orders">
-            <Button variant="secondary">View Orders</Button>
-          </Link>
-          <Link to="/supplier/products/new">
-            <Button>+ Add New Product</Button>
-          </Link>
-        </div>
-      </div>
-      
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem', marginBottom: '2rem' }}>
-        <div style={{ padding: '1.5rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-          <h3 style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Total Sales</h3>
-          <p style={{ fontSize: '2rem', fontWeight: 'bold', marginTop: '0.5rem' }}>$12,450</p>
-        </div>
-        <div style={{ padding: '1.5rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-          <h3 style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Active Orders</h3>
-          <p style={{ fontSize: '2rem', fontWeight: 'bold', marginTop: '0.5rem', color: '#fbbf24' }}>5</p>
-        </div>
-        <div style={{ padding: '1.5rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-          <h3 style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>Products Listed</h3>
-          <p style={{ fontSize: '2rem', fontWeight: 'bold', marginTop: '0.5rem' }}>24</p>
-        </div>
-      </div>
+    <>
+        <SEO title="Supplier Dashboard" description="Manage your inventory and fulfill orders." />
+        <div style={{ padding: '2rem' }}>
+            <header style={{ marginBottom: '2rem' }}>
+                <h2 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Supplier Dashboard</h2>
+            </header>
+            
+            {/* Stats Overview */}
+            <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '3rem' }}>
+                <div style={{ padding: '1.5rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                    <h3 style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Total Sales</h3>
+                    <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>$12,450</p>
+                </div>
+                <div style={{ padding: '1.5rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                    <h3 style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Active Orders</h3>
+                    <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>8</p>
+                </div>
+                <div style={{ padding: '1.5rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                    <h3 style={{ fontSize: '0.875rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>Products Listed</h3>
+                    <p style={{ fontSize: '2rem', fontWeight: 'bold' }}>24</p>
+                </div>
+            </section>
 
-      <h2 style={{ fontSize: '1.25rem', fontWeight: 'bold', marginBottom: '1rem' }}>Recent Products</h2>
-      <div style={{ backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', overflow: 'hidden' }}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-          <thead style={{ backgroundColor: 'rgb(255 255 255 / 0.05)' }}>
-            <tr>
-              <th style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '600' }}>Product Name</th>
-              <th style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '600' }}>Price</th>
-              <th style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '600' }}>Stock</th>
-              <th style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '600' }}>Status</th>
-              <th style={{ padding: '1rem', fontSize: '0.875rem', fontWeight: '600' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td style={{ padding: '1rem', borderTop: '1px solid var(--border)' }}>Industrial Steel Pipe</td>
-              <td style={{ padding: '1rem', borderTop: '1px solid var(--border)' }}>$45.00/m</td>
-              <td style={{ padding: '1rem', borderTop: '1px solid var(--border)' }}>500</td>
-              <td style={{ padding: '1rem', borderTop: '1px solid var(--border)', color: 'var(--secondary)' }}>Active</td>
-              <td style={{ padding: '1rem', borderTop: '1px solid var(--border)' }}>
-                <Button variant="outline" style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}>Edit</Button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+            {/* Quick Actions */}
+            <section style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+                <div style={{ padding: '2rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Manage Products</h3>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Add new items or update inventory.</p>
+                    <Link to="/supplier/products/new" style={{ display: 'inline-block', padding: '0.75rem 1.5rem', backgroundColor: 'var(--primary)', color: 'white', borderRadius: 'var(--radius-sm)', textDecoration: 'none' }}>Add Product</Link>
+                </div>
+                <div style={{ padding: '2rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Order Fulfillment</h3>
+                    <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>View pending orders and update status.</p>
+                    <Link to="/supplier/orders" style={{ display: 'inline-block', padding: '0.75rem 1.5rem', backgroundColor: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', borderRadius: 'var(--radius-sm)', textDecoration: 'none' }}>View Orders</Link>
+                </div>
+            </section>
+        </div>
+    </>
   );
 };
 

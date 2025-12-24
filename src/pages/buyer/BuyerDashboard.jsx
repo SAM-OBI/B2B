@@ -1,35 +1,29 @@
 import { Link } from 'react-router-dom';
-import Button from '../../components/ui/Button';
+import SEO from '../../components/SEO';
 
 const BuyerDashboard = () => {
     return (
-      <div style={{ padding: '2rem' }}>
-        <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-            <h1 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Buyer Dashboard</h1>
-            <Link to="/buyer/catalog">
-                <Button>Browse Products</Button>
-            </Link>
-        </header>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
-            <div style={{ padding: '2rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Active Orders</h2>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Track your recent purchases and shipments.</p>
-                <Link to="/buyer/orders">
-                    <Button variant="outline">View Order History</Button>
-                </Link>
+        <>
+            <SEO title="Buyer Dashboard" description="Manage your orders and browse the catalog." />
+            <div style={{ padding: '2rem' }}>
+                <header style={{ marginBottom: '2rem' }}>
+                    <h2 style={{ fontSize: '2rem', fontWeight: 'bold' }}>Buyer Dashboard</h2>
+                </header>
+                <div style={{ display: 'grid', gap: '2rem', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))' }}>
+                    <section style={{ padding: '2rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Browse Catalog</h3>
+                        <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Find the best products for your business.</p>
+                        <Link to="/buyer/catalog" style={{ display: 'inline-block', padding: '0.75rem 1.5rem', backgroundColor: 'var(--primary)', color: 'white', borderRadius: 'var(--radius-sm)', textDecoration: 'none' }}>Go to Catalog</Link>
+                    </section>
+                    <section style={{ padding: '2rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
+                        <h3 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>My Orders</h3>
+                        <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Track and manage your recent purchases.</p>
+                        <Link to="/buyer/orders" style={{ display: 'inline-block', padding: '0.75rem 1.5rem', backgroundColor: 'var(--surface)', border: '1px solid var(--border)', color: 'var(--text-main)', borderRadius: 'var(--radius-sm)', textDecoration: 'none' }}>View Orders</Link>
+                    </section>
+                </div>
             </div>
-            
-            <div style={{ padding: '2rem', backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)' }}>
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Quick Order</h2>
-                <p style={{ color: 'var(--text-muted)', marginBottom: '1.5rem' }}>Reorder from your frequently purchased items.</p>
-                <Link to="/buyer/catalog">
-                    <Button variant="outline">Go to Catalog</Button>
-                </Link>
-            </div>
-        </div>
-      </div>
+        </>
     );
-  };
-  
-  export default BuyerDashboard;
+};
+
+export default BuyerDashboard;

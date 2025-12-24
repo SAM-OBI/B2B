@@ -63,35 +63,42 @@ const NavBar = () => {
     );
 };
 
+import { NotificationProvider } from './context/NotificationContext';
+import { HelmetProvider } from 'react-helmet-async';
+
 function App() {
   return (
-    <CartProvider>
-        <Router>
-        <NavBar />
-        <main>
-            <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            
-            <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
-            <Route path="/buyer/catalog" element={<Catalog />} />
-            <Route path="/buyer/cart" element={<Cart />} />
-            <Route path="/buyer/checkout" element={<Checkout />} />
-            <Route path="/buyer/orders" element={<OrderHistory />} />
+    <HelmetProvider>
+        <NotificationProvider>
+            <CartProvider>
+                <Router>
+                <NavBar />
+                <main>
+                    <Routes>
+                    <Route path="/" element={<Home />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    
+                    <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
+                    <Route path="/buyer/catalog" element={<Catalog />} />
+                    <Route path="/buyer/cart" element={<Cart />} />
+                    <Route path="/buyer/checkout" element={<Checkout />} />
+                    <Route path="/buyer/orders" element={<OrderHistory />} />
 
-            <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
-            <Route path="/supplier/products/new" element={<AddProduct />} />
-            <Route path="/supplier/orders" element={<Orders />} />
+                    <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
+                    <Route path="/supplier/products/new" element={<AddProduct />} />
+                    <Route path="/supplier/orders" element={<Orders />} />
 
-            <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            <Route path="/admin/users" element={<UserManagement />} />
-            <Route path="/admin/products" element={<ProductModeration />} />
-            <Route path="/admin/orders" element={<AdminOrders />} />
-            </Routes>
-        </main>
-        </Router>
-    </CartProvider>
+                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                    <Route path="/admin/users" element={<UserManagement />} />
+                    <Route path="/admin/products" element={<ProductModeration />} />
+                    <Route path="/admin/orders" element={<AdminOrders />} />
+                    </Routes>
+                </main>
+                </Router>
+            </CartProvider>
+        </NotificationProvider>
+    </HelmetProvider>
   )
 }
 
