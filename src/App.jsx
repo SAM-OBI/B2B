@@ -17,6 +17,26 @@ import UserManagement from './pages/admin/UserManagement';
 import ProductModeration from './pages/admin/ProductModeration';
 import AdminOrders from './pages/admin/AdminOrders';
 
+import { ThemeProvider, useTheme } from './context/ThemeContext';
+
+const ThemeToggle = () => {
+  const { theme, toggleTheme } = useTheme();
+  return (
+    <button onClick={toggleTheme} style={{ 
+        padding: '0.5rem', 
+        borderRadius: '50%', 
+        backgroundColor: 'var(--surface)', 
+        color: 'var(--text-main)', 
+        border: '1px solid var(--border)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center'
+    }} title={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+      {theme === 'dark' ? '☀️' : '🌙'}
+    </button>
+  );
+};
+
 const NavBar = () => {
     const { cartItems } = useCart();
     const location = useLocation();
@@ -33,6 +53,7 @@ const NavBar = () => {
                 </h1>
                 </Link>
                 <nav style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <ThemeToggle />
                     <Link to="/" style={{ color: '#a5b4fc', fontSize: '0.875rem', textDecoration: 'none' }}>Exit to Store</Link>
                 </nav>
             </header>
@@ -47,6 +68,7 @@ const NavBar = () => {
             </h1>
             </Link>
             <nav style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+            <ThemeToggle />
             {!isBuyerPage ? (
                 <>
                     <Link to="/login" style={{ color: 'var(--text-muted)', fontSize: '0.875rem', textDecoration: 'none', fontWeight: '500' }}>Login</Link>
@@ -65,17 +87,20 @@ const NavBar = () => {
 
 import { NotificationProvider } from './context/NotificationContext';
 import { HelmetProvider } from 'react-helmet-async';
+import { AuthProvider } from './context/AuthContext';
 
 function App() {
   return (
     <HelmetProvider>
-        <NotificationProvider>
-            <CartProvider>
-                <Router>
-                <NavBar />
-                <main>
-                    <Routes>
-                    <Route path="/" element={<Home />} />
+        <ThemeProvider>
+            <NotificationProvider>
+                <AuthProvider>
+                    <CartProvider>
+                        <Router>
+                        <NavBar />
+                    <main>
+                        <Routes>
+                        <Route path="/" element={<Home />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                     
@@ -96,8 +121,10 @@ function App() {
                     </Routes>
                 </main>
                 </Router>
-            </CartProvider>
-        </NotificationProvider>
+                </CartProvider>
+                </AuthProvider>
+            </NotificationProvider>
+        </ThemeProvider>
     </HelmetProvider>
   )
 }

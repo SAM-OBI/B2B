@@ -5,14 +5,17 @@ import Swal from 'sweetalert2';
 import { validateEmail, validatePassword, PASSWORD_REQUIREMENTS } from '../../utils/validators';
 import SEO from '../../components/SEO';
 
+import { useAuth } from '../../context/AuthContext';
+
 const Register = () => {
   const [role, setRole] = useState('Buyer'); // 'Buyer' or 'Supplier'
   const navigate = useNavigate();
+  const { register } = useAuth();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     password: '',
-    passwordConfirm: '', // Fixed variable name to match usage
+    passwordConfirm: '',
     companyName: ''
   });
 
@@ -20,7 +23,7 @@ const Register = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { name, email, password, passwordConfirm, companyName } = formData;
 
@@ -49,18 +52,25 @@ const Register = () => {
         return;
     }
 
-    // Simulate Registration
-    console.log(`Registering as ${role}:`, formData);
-    
-    Swal.fire({
-        icon: 'success',
-        title: 'Registration Successful',
-        text: `Welcome aboard, ${name}! Redirecting to login...`,
-        timer: 2000,
-        showConfirmButton: false
-    }).then(() => {
-        navigate('/login');
-    });
+    try {
+        await register({ name, email, password, role, companyName });
+        
+        Swal.fire({
+            icon: 'success',
+            title: 'Registration Successful',
+            text: `Welcome aboard, ${name}! Redirecting to login...`,
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            navigate('/login');
+        });
+    } catch (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Registration Failed',
+            text: error.response?.data?.msg || 'Could not create account.',
+        });
+    }
   };
 
   return (

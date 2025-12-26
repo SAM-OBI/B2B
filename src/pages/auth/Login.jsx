@@ -18,7 +18,7 @@ const Login = () => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
         // Validation
@@ -42,18 +42,29 @@ const Login = () => {
             return;
         }
 
-        // Simulate Login
-        login({ name: 'Test User', email: formData.email, role: 'Buyer' });
-        
-        Swal.fire({
-            icon: 'success',
-            title: 'Welcome back!',
-            text: 'Login successful.',
-            timer: 1500,
-            showConfirmButton: false
-        }).then(() => {
-            navigate('/buyer/dashboard');
-        });
+        try {
+            const user = await login(formData.email, formData.password);
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Welcome back!',
+                text: 'Login successful.',
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                // Redirect based on role
+                if (user.role === 'Supplier') navigate('/supplier/dashboard');
+                else if (user.role === 'Admin') navigate('/admin/dashboard');
+                else navigate('/buyer/dashboard');
+            });
+        } catch (error) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Login Failed',
+                text: error.response?.data?.msg || 'Invalid credentials',
+                confirmButtonColor: '#d33',
+            });
+        }
     };
 
     return (

@@ -1,23 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '../../components/ui/Button';
 import { useCart } from '../../context/CartContext';
 import SEO from '../../components/SEO';
-
-const MOCK_PRODUCTS = [
-  { id: 1, name: 'Industrial Drill', price: 1500, category: 'Tools', image: 'https://placehold.co/400' },
-  { id: 2, name: 'Steel Pipes', price: 300, category: 'Materials', image: 'https://placehold.co/400' },
-  { id: 3, name: 'Safety Gloves', price: 25, category: 'Safety', image: 'https://placehold.co/400' },
-  { id: 4, name: 'Generator 5000W', price: 12000, category: 'Power', image: 'https://placehold.co/400' },
-];
+import axios from 'axios';
+import { useNotification } from '../../context/NotificationContext';
 
 const Catalog = () => {
   const { addToCart } = useCart();
+  const { addNotification } = useNotification();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories = ['All', ...new Set(MOCK_PRODUCTS.map(p => p.category))];
+  useEffect(() => {
+      fetchProducts();
+  }, []);
 
-  const filteredProducts = MOCK_PRODUCTS.filter(product => {
+  const fetchProducts = async () => {
+      try {
+          // If axios.defaults.baseURL is set in AuthContext, this works. 
+          // Otherwise use full URL or proxy.
+          const res = await axios.get('/api/products');
+          setProducts(res.data);
+      } catch (error) {
+          console.error("Error fetching products:", error);
+          addNotification('Failed to load products', 'error');
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  const categories = ['All', ...new Set(products.map(p => p.category))];
+
+  const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || product.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -33,7 +49,7 @@ const Catalog = () => {
               "@type": "Product",
               "name": product.name,
               "image": product.image,
-              "description": `High quality ${product.name} for industrial use.`,
+              "description": product.description || `High quality ${product.name} for industrial use.`,
               "offers": {
                   "@type": "Offer",
                   "price": product.price,
@@ -42,6 +58,10 @@ const Catalog = () => {
           }
       }))
   };
+
+  if (loading) {
+      return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading Catalog...</div>;
+  }
 
   return (
     <>
@@ -86,21 +106,25 @@ const Catalog = () => {
 
         {/* Grid */}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '2rem' }}>
-            {filteredProducts.map(product => (
-            <article key={product.id} style={{ backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                <img src={product.image} alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
-                <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
-                    <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{product.name}</h3>
-                    <span style={{ fontSize: '0.875rem', color: 'var(--primary)', padding: '0.25rem 0.5rem', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderRadius: 'var(--radius-sm)' }}>{product.category}</span>
-                </div>
-                <p style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>${product.price.toLocaleString()}</p>
-                <Button onClick={() => addToCart(product)} style={{ marginTop: 'auto' }}>
-                    Add to Cart
-                </Button>
-                </div>
-            </article>
-            ))}
+            {filteredProducts.length === 0 ? (
+                <p>No products found.</p>
+            ) : (
+                filteredProducts.map(product => (
+                <article key={product._id || product.id} style={{ backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+                    <img src={product.image || 'https://placehold.co/400'} alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                    <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
+                        <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{product.name}</h3>
+                        <span style={{ fontSize: '0.875rem', color: 'var(--primary)', padding: '0.25rem 0.5rem', backgroundColor: 'rgba(59, 130, 246, 0.1)', borderRadius: 'var(--radius-sm)' }}>{product.category}</span>
+                    </div>
+                    <p style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem' }}>${product.price.toLocaleString()}</p>
+                    <Button onClick={() => addToCart(product)} style={{ marginTop: 'auto' }}>
+                        Add to Cart
+                    </Button>
+                    </div>
+                </article>
+                ))
+            )}
         </div>
         </div>
     </>

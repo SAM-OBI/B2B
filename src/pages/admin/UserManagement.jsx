@@ -1,18 +1,39 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Button from '../../components/ui/Button';
+import axios from 'axios';
+import Swal from 'sweetalert2';
 
 const UserManagement = () => {
-  // Mock Data
-  const [users, setUsers] = useState([
-    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Buyer', status: 'Active' },
-    { id: 2, name: 'SteelCo Industries', email: 'sales@steelco.com', role: 'Supplier', status: 'Active' },
-    { id: 3, name: 'Bob Builder', email: 'bob@buildit.com', role: 'Buyer', status: 'Banned' },
-  ]);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const toggleStatus = (id) => {
-    setUsers(users.map(user => 
-      user.id === id ? { ...user, status: user.status === 'Active' ? 'Banned' : 'Active' } : user
-    ));
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      const res = await axios.get('/api/users');
+      setUsers(res.data);
+    } catch (error) {
+      console.error("Error fetching users:", error);
+      Swal.fire('Error', 'Failed to load users', 'error');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const toggleStatus = async (id, currentStatus) => {
+    const newStatus = currentStatus === 'Active' ? 'Banned' : 'Active';
+    try {
+      await axios.put(`/api/users/${id}/status`, { status: newStatus });
+      setUsers(users.map(user => 
+        user._id === id ? { ...user, status: newStatus } : user
+      ));
+      Swal.fire('Success', `User has been ${newStatus.toLowerCase()}`, 'success');
+    } catch (error) {
+       Swal.fire('Error', 'Failed to update status', 'error');
+    }
   };
 
   return (
@@ -31,8 +52,8 @@ const UserManagement = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr key={user.id} style={{ borderTop: '1px solid var(--border)' }}>
+            {loading ? <tr><td colSpan="5" style={{padding:'2rem', textAlign:'center'}}>Loading users...</td></tr> : users.length === 0 ? <tr><td colSpan="5" style={{padding:'2rem', textAlign:'center'}}>No users found.</td></tr> : users.map(user => (
+              <tr key={user._id} style={{ borderTop: '1px solid var(--border)' }}>
                 <td style={{ padding: '1rem', fontWeight: '500' }}>{user.name}</td>
                 <td style={{ padding: '1rem', color: 'var(--text-muted)' }}>{user.email}</td>
                  <td style={{ padding: '1rem' }}>
@@ -48,13 +69,13 @@ const UserManagement = () => {
                  </td>
                 <td style={{ padding: '1rem' }}>
                     <span style={{ color: user.status === 'Active' ? '#10b981' : '#ef4444', fontWeight: '500' }}>
-                        {user.status}
+                        {user.status || 'Active'}
                     </span>
                 </td>
                 <td style={{ padding: '1rem' }}>
                   <Button 
                     variant="outline" 
-                    onClick={() => toggleStatus(user.id)}
+                    onClick={() => toggleStatus(user._id, user.status || 'Active')}
                     style={{ fontSize: '0.75rem', padding: '0.25rem 0.75rem', borderColor: user.status === 'Active' ? '#ef4444' : '#10b981', color: user.status === 'Active' ? '#ef4444' : '#10b981' }}
                   >
                     {user.status === 'Active' ? 'Ban' : 'Activate'}
