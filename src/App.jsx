@@ -1,21 +1,24 @@
+import React, { Suspense, lazy } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import { CartProvider, useCart } from './context/CartContext';
-import Home from './pages/Home';
-import Login from './pages/auth/Login';
-import Register from './pages/auth/Register';
-import BuyerDashboard from './pages/buyer/BuyerDashboard';
-import SupplierDashboard from './pages/supplier/SupplierDashboard';
-import AddProduct from './pages/supplier/AddProduct';
-import Orders from './pages/supplier/Orders';
-import Catalog from './pages/buyer/Catalog';
-import Cart from './pages/buyer/Cart';
-import Checkout from './pages/buyer/Checkout';
-import OrderHistory from './pages/buyer/OrderHistory';
 
-import AdminDashboard from './pages/admin/AdminDashboard';
-import UserManagement from './pages/admin/UserManagement';
-import ProductModeration from './pages/admin/ProductModeration';
-import AdminOrders from './pages/admin/AdminOrders';
+// Lazy Load Pages
+const Home = lazy(() => import('./pages/Home'));
+const Login = lazy(() => import('./pages/auth/Login'));
+const Register = lazy(() => import('./pages/auth/Register'));
+const BuyerDashboard = lazy(() => import('./pages/buyer/BuyerDashboard'));
+const SupplierDashboard = lazy(() => import('./pages/supplier/SupplierDashboard'));
+const AddProduct = lazy(() => import('./pages/supplier/AddProduct'));
+const Orders = lazy(() => import('./pages/supplier/Orders'));
+const Catalog = lazy(() => import('./pages/buyer/Catalog'));
+const Cart = lazy(() => import('./pages/buyer/Cart'));
+const Checkout = lazy(() => import('./pages/buyer/Checkout'));
+const OrderHistory = lazy(() => import('./pages/buyer/OrderHistory'));
+
+const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'));
+const UserManagement = lazy(() => import('./pages/admin/UserManagement'));
+const ProductModeration = lazy(() => import('./pages/admin/ProductModeration'));
+const AdminOrders = lazy(() => import('./pages/admin/AdminOrders'));
 
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 
@@ -99,27 +102,29 @@ function App() {
                         <Router>
                         <NavBar />
                     <main>
-                        <Routes>
-                        <Route path="/" element={<Home />} />
-                    <Route path="/login" element={<Login />} />
-                    <Route path="/register" element={<Register />} />
-                    
-                    <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
-                    <Route path="/buyer/catalog" element={<Catalog />} />
-                    <Route path="/buyer/cart" element={<Cart />} />
-                    <Route path="/buyer/checkout" element={<Checkout />} />
-                    <Route path="/buyer/orders" element={<OrderHistory />} />
+                        <Suspense fallback={<div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>Loading...</div>}>
+                            <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            
+                            <Route path="/buyer/dashboard" element={<BuyerDashboard />} />
+                            <Route path="/buyer/catalog" element={<Catalog />} />
+                            <Route path="/buyer/cart" element={<Cart />} />
+                            <Route path="/buyer/checkout" element={<Checkout />} />
+                            <Route path="/buyer/orders" element={<OrderHistory />} />
 
-                    <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
-                    <Route path="/supplier/products/new" element={<AddProduct />} />
-                    <Route path="/supplier/orders" element={<Orders />} />
+                            <Route path="/supplier/dashboard" element={<SupplierDashboard />} />
+                            <Route path="/supplier/products/new" element={<AddProduct />} />
+                            <Route path="/supplier/orders" element={<Orders />} />
 
-                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                    <Route path="/admin/users" element={<UserManagement />} />
-                    <Route path="/admin/products" element={<ProductModeration />} />
-                    <Route path="/admin/orders" element={<AdminOrders />} />
-                    </Routes>
-                </main>
+                            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                            <Route path="/admin/users" element={<UserManagement />} />
+                            <Route path="/admin/products" element={<ProductModeration />} />
+                            <Route path="/admin/orders" element={<AdminOrders />} />
+                            </Routes>
+                        </Suspense>
+                    </main>
                 </Router>
                 </CartProvider>
                 </AuthProvider>

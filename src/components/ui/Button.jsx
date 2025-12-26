@@ -34,6 +34,7 @@ const Button = ({ children, variant = 'primary', onClick, style = {}, ...props }
       onClick={onClick}
       onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'}
       onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+      aria-label={props['aria-label'] || (typeof children === 'string' ? children : 'Button')}
       {...props}
     >
       {children}

@@ -75,8 +75,9 @@ const Login = () => {
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1.5rem', textAlign: 'center' }}>Login</h2>
                     <form onSubmit={handleSubmit} style={{ display: 'grid', gap: '1rem' }}>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Email</label>
+                            <label htmlFor="email" style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Email</label>
                             <input 
+                                id="email"
                                 type="email" 
                                 name="email" 
                                 value={formData.email} 
@@ -86,14 +87,28 @@ const Login = () => {
                             />
                         </div>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Password</label>
+                            <label htmlFor="password" style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.875rem' }}>Password</label>
                             <input 
+                                id="password"
                                 type="password" 
                                 name="password" 
                                 value={formData.password} 
                                 onChange={handleChange}
                                 style={{ width: '100%', padding: '0.5rem', borderRadius: 'var(--radius-sm)', border: '1px solid var(--border)', backgroundColor: 'var(--background)', color: 'var(--text-main)' }}
                                 required 
+                            />
+                        </div>
+                        {/* Honeypot Field for Bot Detection */}
+                        <div style={{ display: 'none', position: 'absolute', left: '-9999px' }}>
+                            <label htmlFor="website_trap">Website</label>
+                            <input 
+                                type="text"
+                                id="website_trap"
+                                name="website_trap" 
+                                value={formData.website_trap || ''}
+                                onChange={handleChange}
+                                tabIndex="-1"
+                                autoComplete="off"
                             />
                         </div>
                         <Button type="submit" style={{ width: '100%' }}>Login</Button>

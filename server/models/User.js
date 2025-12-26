@@ -34,7 +34,17 @@ const userSchema = new mongoose.Schema({
     createdAt: {
         type: Date,
         default: Date.now
-    }
+    },
+    lastLoginIP: {
+        type: String
+    },
+    loginHistory: [{
+        ip: String,
+        date: {
+            type: Date,
+            default: Date.now
+        }
+    }]
 });
 
 module.exports = mongoose.model('User', userSchema);

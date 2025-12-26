@@ -46,28 +46,40 @@ const UserManagement = () => {
             <tr>
               <th style={{ padding: '1rem' }}>Name</th>
               <th style={{ padding: '1rem' }}>Email</th>
-              <th style={{ padding: '1rem' }}>Role</th>
-              <th style={{ padding: '1rem' }}>Status</th>
-              <th style={{ padding: '1rem' }}>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {loading ? <tr><td colSpan="5" style={{padding:'2rem', textAlign:'center'}}>Loading users...</td></tr> : users.length === 0 ? <tr><td colSpan="5" style={{padding:'2rem', textAlign:'center'}}>No users found.</td></tr> : users.map(user => (
-              <tr key={user._id} style={{ borderTop: '1px solid var(--border)' }}>
-                <td style={{ padding: '1rem', fontWeight: '500' }}>{user.name}</td>
-                <td style={{ padding: '1rem', color: 'var(--text-muted)' }}>{user.email}</td>
-                 <td style={{ padding: '1rem' }}>
-                    <span style={{ 
-                        padding: '0.25rem 0.5rem', 
-                        borderRadius: '4px',
-                        fontSize: '0.75rem',
-                        backgroundColor: user.role === 'Supplier' ? 'rgba(99, 102, 241, 0.2)' : 'rgba(255, 255, 255, 0.1)',
-                        color: user.role === 'Supplier' ? '#818cf8' : 'var(--text-muted)'
-                    }}>
-                        {user.role}
-                    </span>
-                 </td>
-                <td style={{ padding: '1rem' }}>
+                <th style={{ padding: '1rem' }}>Role</th>
+                <th style={{ padding: '1rem' }}>Last Login IP</th>
+                <th style={{ padding: '1rem' }}>Status</th>
+                <th style={{ padding: '1rem' }}>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {loading ? (
+                  <tr><td colSpan="6" style={{padding: '2rem', textAlign: 'center'}}>Loading users...</td></tr>
+              ) : users.length === 0 ? (
+                  <tr><td colSpan="6" style={{padding: '2rem', textAlign: 'center'}}>No users found.</td></tr>
+              ) : (
+                  users.map(user => (
+                    <tr key={user._id} style={{ borderTop: '1px solid var(--border)' }}>
+                      <td style={{ padding: '1rem', fontWeight: 'bold' }}>{user.name}</td>
+                      <td style={{ padding: '1rem', color: 'var(--text-muted)' }}>{user.email}</td>
+                      <td style={{ padding: '1rem' }}>
+                        <span style={{ 
+                            padding: '0.25rem 0.5rem', 
+                            borderRadius: '4px', 
+                            fontSize: '0.75rem',
+                            backgroundColor: user.role === 'Admin' ? '#e0e7ff' : user.role === 'Supplier' ? '#fce7f3' : '#e0f2fe',
+                            color: user.role === 'Admin' ? '#4338ca' : user.role === 'Supplier' ? '#be185d' : '#0369a1'
+                        }}>
+                            {user.role}
+                        </span>
+                      </td>
+                      <td style={{ padding: '1rem', fontFamily: 'monospace', fontSize: '0.875rem' }}>
+                        {user.lastLoginIP || 'N/A'}
+                        {user.loginHistory && user.loginHistory.length > 0 && (
+                            <span title="View History" style={{ marginLeft: '0.5rem', cursor: 'help', fontSize: '0.75rem' }}>ℹ️</span>
+                        )}
+                      </td>
+                      <td style={{ padding: '1rem' }}>
                     <span style={{ color: user.status === 'Active' ? '#10b981' : '#ef4444', fontWeight: '500' }}>
                         {user.status || 'Active'}
                     </span>
@@ -82,12 +94,13 @@ const UserManagement = () => {
                   </Button>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  );
-};
+    );
+  };
 
 export default UserManagement;

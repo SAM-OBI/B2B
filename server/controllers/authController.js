@@ -70,6 +70,24 @@ exports.login = async (req, res) => {
             return res.status(400).json({ msg: 'Invalid Credentials' });
         }
 
+        // Honeypot Check (Bot Protection)
+        if (req.body.website_trap) {
+            console.warn(`Bot detected! IP: ${req.ip} tried to login with honeypot field.`);
+            return res.status(400).json({ msg: 'Invalid Credentials' }); // Don't reveal why
+        }
+
+        // IP Tracking
+        const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        user.lastLoginIP = ip;
+        user.loginHistory.push({ ip: ip });
+        
+        // Keep history size manageable (last 50)
+        if (user.loginHistory.length > 50) {
+            user.loginHistory.shift();
+        }
+        
+        await user.save();
+
         sendTokenResponse(user, 200, res);
 
     } catch (err) {

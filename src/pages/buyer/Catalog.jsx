@@ -111,7 +111,14 @@ const Catalog = () => {
             ) : (
                 filteredProducts.map(product => (
                 <article key={product._id || product.id} style={{ backgroundColor: 'var(--surface)', borderRadius: 'var(--radius-md)', border: '1px solid var(--border)', overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-                    <img src={product.image || 'https://placehold.co/400'} alt={product.name} style={{ width: '100%', height: '200px', objectFit: 'cover' }} />
+                    <img 
+                    src={product.image || 'https://via.placeholder.com/300'} 
+                    alt={product.name} 
+                    loading="lazy"
+                    width="300"
+                    height="200"
+                    style={{ width: '100%', height: '200px', objectFit: 'cover' }} 
+                />
                     <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', marginBottom: '0.5rem' }}>
                         <h3 style={{ fontSize: '1.25rem', fontWeight: 'bold' }}>{product.name}</h3>
